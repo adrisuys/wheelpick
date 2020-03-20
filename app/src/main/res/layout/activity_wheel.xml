@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.WheelActivity"
+    android:background="#000">
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="5dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:paddingLeft="10dp"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="WHEELPICK"
+            android:fontFamily="@font/soloist1"
+            android:textSize="35dp"
+            android:textColor="#FFF"
+            android:singleLine="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/pointer"/>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/wheel"
+            android:layout_width="400dp"
+            android:layout_height="400dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:id="@+id/result"
+            android:textSize="30dp"
+            android:textColor="#FFF"
+            android:fontFamily="@font/soloist1"/>
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="SPIN"
+            android:textColor="#FFF"
+            android:background="@drawable/button_rounded"
+            android:onClick="spin"/>
+
+    </LinearLayout>
+
+</LinearLayout>
