@@ -6,9 +6,9 @@ import java.util.List;
 public class Categorie implements Serializable {
 
     private String label;
-    private List<String> items;
+    private List<Item> items;
 
-    public Categorie(String label, List<String> items) {
+    public Categorie(String label, List<Item> items) {
         this.label = label;
         this.items = items;
     }
@@ -21,11 +21,11 @@ public class Categorie implements Serializable {
         this.label = label;
     }
 
-    public List<String> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
-    public void setItems(List<String> items) {
+    public void setItems(List<Item> items) {
         this.items = items;
     }
 }

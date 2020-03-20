@@ -3,6 +3,7 @@ package be.depinxi.charts.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.depinxi.charts.model.Categorie;
+import be.depinxi.charts.model.DataHolder;
 import be.depinxi.charts.presenter.Presenter;
 import be.depinxi.charts.R;
 
@@ -127,11 +129,9 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
 
         @Override
         public void onClick(View v) {
-            System.out.println("deded");
             Intent newIntent = new Intent(MainActivity.this, ItemActivity.class);
-            String json = new Gson().toJson(presenter.getItems());
-            newIntent.putExtra("items", json);
-            newIntent.putExtra("position", getAdapterPosition());
+            DataHolder.setCurrentPos(getAdapterPosition());
+            DataHolder.setCats(presenter.getItems());
             startActivity(newIntent);
         }
     }

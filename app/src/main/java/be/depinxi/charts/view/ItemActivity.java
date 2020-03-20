@@ -23,6 +23,8 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 
 import be.depinxi.charts.model.Categorie;
+import be.depinxi.charts.model.DataHolder;
+import be.depinxi.charts.model.Item;
 import be.depinxi.charts.presenter.ItemPresenter;
 import be.depinxi.charts.R;
 
@@ -33,16 +35,17 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
     private ItemPresenter presenter;
     private EditText input;
     private List<Categorie> cats;
-    private List<String> currentList;
+    private List<Item> currentList;
     private TextView title;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
         String json = getIntent().getStringExtra("items");
-        int position = getIntent().getIntExtra("position", 0);
-        cats = new Gson().fromJson(json, new TypeToken<List<Categorie>>(){}.getType());
+        position = DataHolder.getCurrentPos();
+        cats = DataHolder.getCats();
         currentList = cats.get(position).getItems();
         title = findViewById(R.id.title_text);
         title.setText(cats.get(position).getLabel());
@@ -98,9 +101,18 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
             Toast.makeText(this, "Not enough items !", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(this, WheelActivity.class);
-            intent.putStringArrayListExtra("items", presenter.getItems());
+            DataHolder.setCats(cats);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        DataHolder.setCats(cats);
+        DataHolder.setCurrentPos(position);
+        startActivity(intent);
     }
 
     public void addItem(View v){
