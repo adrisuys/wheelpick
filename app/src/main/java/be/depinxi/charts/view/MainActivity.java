@@ -3,6 +3,7 @@ package be.depinxi.charts.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
         List<Categorie> cats = new ArrayList<>();
         SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
         String json = sharedPreferences.getString("cats", null);
+        System.out.println(json);
         if (json != null){
             cats = new Gson().fromJson(json, new TypeToken<List<Categorie>>(){}.getType());
         }

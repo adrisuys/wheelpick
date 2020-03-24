@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.depinxi.charts.model.Categorie;
-import be.depinxi.charts.model.Item;
 import be.depinxi.charts.view.MainActivity;
 import be.depinxi.charts.view.ViewInterface;
 
@@ -20,7 +19,7 @@ public class Presenter {
 
     public void addItem(String item){
         if (item != ""){
-            Categorie cat = new Categorie(item, new ArrayList<Item>());
+            Categorie cat = new Categorie(item, new ArrayList<String>());
             items.add(cat);
             view.updateList();
         }

@@ -18,13 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
 import be.depinxi.charts.model.Categorie;
 import be.depinxi.charts.model.DataHolder;
-import be.depinxi.charts.model.Item;
 import be.depinxi.charts.presenter.ItemPresenter;
 import be.depinxi.charts.R;
 
@@ -35,7 +33,7 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
     private ItemPresenter presenter;
     private EditText input;
     private List<Categorie> cats;
-    private List<Item> currentList;
+    private List<String> currentList;
     private TextView title;
     private int position;
 
@@ -101,7 +99,7 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
             Toast.makeText(this, "Not enough items !", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(this, WheelActivity.class);
-            DataHolder.setCats(cats);
+            intent.putStringArrayListExtra("items", presenter.getItems());
             startActivity(intent);
         }
     }

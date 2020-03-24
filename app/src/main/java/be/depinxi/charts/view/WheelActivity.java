@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -18,8 +17,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,6 @@ import java.util.Random;
 import be.depinxi.charts.R;
 import be.depinxi.charts.model.Categorie;
 import be.depinxi.charts.model.DataHolder;
-import be.depinxi.charts.model.Item;
 
 public class WheelActivity extends AppCompatActivity {
 
@@ -36,8 +32,6 @@ public class WheelActivity extends AppCompatActivity {
     private TextView tv;
     private int degree, degreeOld;
     private List<String> items;
-    private List<Categorie> cats;
-    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +40,8 @@ public class WheelActivity extends AppCompatActivity {
         degreeOld = 0;
         degree = 0;
         tv = findViewById(R.id.result);
-        position = DataHolder.getCurrentPos();
-        cats = DataHolder.getCats();
-        items = getList(cats.get(position));
+        items = getIntent().getStringArrayListExtra("items");
         setWheel(items);
-    }
-
-    private List<String> getList(Categorie categorie) {
-        List<String> ss = new ArrayList<>();
-        for (Item i : categorie.getItems()){
-            ss.add(i.getLabel());
-        }
-        return ss;
     }
 
     private void setWheel(List<String> items){
@@ -98,7 +82,6 @@ public class WheelActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 String s = getSector(360 - (degree % 360));
-                backUp(s);
                 tv.setText(s);
             }
 
@@ -108,21 +91,6 @@ public class WheelActivity extends AppCompatActivity {
             }
         });
         wheel.startAnimation(rotateAnimation);
-    }
-
-    private void backUp(String s) {
-        Categorie cat = cats.get(position);
-        for(Item i : cat.getItems()){
-            if (i.getLabel().equals(s)){
-                i.increment();
-                String json = new Gson().toJson(cats);
-                SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("cats", json);
-                editor.commit();
-                return;
-            }
-        }
     }
 
     private String getSector(int degrees) {
@@ -153,8 +121,6 @@ public class WheelActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(this, ItemActivity.class);
-        DataHolder.setCats(cats);
-        DataHolder.setCurrentPos(position);
         startActivity(intent);
     }
 }
