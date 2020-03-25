@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".view.WheelActivity"
-    android:background="#000">
+    android:background="#000"
+    android:id="@+id/background">
 
     <RelativeLayout
         android:id="@+id/title"

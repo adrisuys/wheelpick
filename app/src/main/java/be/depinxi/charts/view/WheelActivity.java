@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -32,11 +33,14 @@ public class WheelActivity extends AppCompatActivity {
     private TextView tv;
     private int degree, degreeOld;
     private List<String> items;
+    private LinearLayout background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wheel);
+        background = findViewById(R.id.background);
+        background.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
         degreeOld = 0;
         degree = 0;
         tv = findViewById(R.id.result);

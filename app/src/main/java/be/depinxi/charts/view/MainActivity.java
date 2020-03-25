@@ -2,15 +2,16 @@ package be.depinxi.charts.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ import be.depinxi.charts.R;
 public class MainActivity extends AppCompatActivity implements ViewInterface {
 
     private RecyclerView recyclerView;
+    private RelativeLayout background;
     private Adapter adapter;
     private Presenter presenter;
     private EditText input;
@@ -41,7 +43,10 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         List<Categorie> cat = fetchCategories();
+        DataHolder.setDarkMode(true);
         presenter = new Presenter(this, cat);
+        background = findViewById(R.id.background);
+        background.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -55,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
         List<Categorie> cats = new ArrayList<>();
         SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
         String json = sharedPreferences.getString("cats", null);
-        System.out.println(json);
         if (json != null){
             cats = new Gson().fromJson(json, new TypeToken<List<Categorie>>(){}.getType());
         }
@@ -110,10 +114,14 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
 
         TextView tv;
         ImageButton btn;
+        LinearLayout background;
 
         public Holder(View itemView){
             super(itemView);
+            background = itemView.findViewById(R.id.background);
+            background.setBackgroundResource(DataHolder.isDarkModeEnabled() ? R.drawable.rounded_rect_black : R.drawable.rounded_rect_white);
             tv = itemView.findViewById(R.id.name);
+            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
             tv.setOnClickListener(this);
             btn = itemView.findViewById(R.id.del_btn);
             btn.setOnClickListener(new View.OnClickListener() {
