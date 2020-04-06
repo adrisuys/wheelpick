@@ -21,8 +21,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import be.depinxi.charts.model.Categorie;
 import be.depinxi.charts.model.DataHolder;
@@ -45,9 +48,7 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
-        background = findViewById(R.id.background);
-        background.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
-        String json = getIntent().getStringExtra("items");
+        handleDarkMode();
         position = DataHolder.getCurrentPos();
         cats = DataHolder.getCats();
         currentList = cats.get(position).getItems();
@@ -95,6 +96,11 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
         }
     }
 
+    private void handleDarkMode(){
+        background = findViewById(R.id.background);
+        background.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
+    }
+
     @Override
     public void updateList() {
         displayItems();
@@ -107,6 +113,21 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
             Intent intent = new Intent(this, WheelActivity.class);
             intent.putStringArrayListExtra("items", presenter.getItems());
             startActivity(intent);
+        }
+    }
+
+    public void switchDarkMode(View v){
+        DataHolder.setDarkMode(!DataHolder.isDarkModeEnabled());
+        handleDarkMode();
+        adapter.notifyDataSetChanged();
+    }
+
+    public void seeStats(View v){
+        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String json = sharedPreferences.getString("stats", null);
+        if (json != null){
+            Map<String, Integer> odds = new Gson().fromJson(json, new TypeToken<Map<String, Integer>>(){}.getType());
+            DataHolder.setOdds(odds);
         }
     }
 
@@ -134,10 +155,7 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
 
         public Holder(View itemView){
             super(itemView);
-            background = itemView.findViewById(R.id.background);
-            background.setBackgroundResource(DataHolder.isDarkModeEnabled() ? R.drawable.rounded_rect_black : R.drawable.rounded_rect_white);
             tv = itemView.findViewById(R.id.name);
-            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
             btn = itemView.findViewById(R.id.del_btn);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -150,6 +168,9 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
 
         public void displayItem(String item) {
             tv.setText(item);
+            background = itemView.findViewById(R.id.background);
+            background.setBackgroundResource(DataHolder.isDarkModeEnabled() ? R.drawable.rounded_rect_black : R.drawable.rounded_rect_white);
+            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
         }
     }
 

@@ -45,8 +45,7 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
         List<Categorie> cat = fetchCategories();
         DataHolder.setDarkMode(true);
         presenter = new Presenter(this, cat);
-        background = findViewById(R.id.background);
-        background.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
+        handleDarkMode();
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -98,6 +97,11 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
         }
     }
 
+    private void handleDarkMode(){
+        background = findViewById(R.id.background);
+        background.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
+    }
+
     @Override
     public void updateList() {
         displayItems();
@@ -110,6 +114,16 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
         backup();
     }
 
+    public void goToDice(View v){
+        startActivity(new Intent(this, DiceActivity.class));
+    }
+
+    public void switchDarkMode(View v){
+        DataHolder.setDarkMode(!DataHolder.isDarkModeEnabled());
+        handleDarkMode();
+        adapter.notifyDataSetChanged();
+    }
+
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tv;
@@ -118,10 +132,7 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
 
         public Holder(View itemView){
             super(itemView);
-            background = itemView.findViewById(R.id.background);
-            background.setBackgroundResource(DataHolder.isDarkModeEnabled() ? R.drawable.rounded_rect_black : R.drawable.rounded_rect_white);
             tv = itemView.findViewById(R.id.name);
-            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
             tv.setOnClickListener(this);
             btn = itemView.findViewById(R.id.del_btn);
             btn.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements ViewInterface {
 
         public void displayItem(String item) {
             tv.setText(item);
+            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
+            background = itemView.findViewById(R.id.background);
+            background.setBackgroundResource(DataHolder.isDarkModeEnabled() ? R.drawable.rounded_rect_black : R.drawable.rounded_rect_white);
         }
 
         @Override

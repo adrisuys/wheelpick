@@ -17,13 +17,22 @@
         <TextView
             android:paddingLeft="10dp"
             android:gravity="center"
-            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:text="WHEELPICK"
             android:fontFamily="@font/soloist1"
             android:textSize="35dp"
             android:textColor="#FFF"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:onClick="switchDarkMode"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/dices"
+            android:layout_alignParentLeft="true"
+            android:onClick="goToDice"/>
 
     </RelativeLayout>
 

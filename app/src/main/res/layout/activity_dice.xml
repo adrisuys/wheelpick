@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="5dp"
+        android:paddingBottom="30dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:text="ROLLIN'"
+            android:id="@+id/title_text"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:fontFamily="@font/soloist1"
+            android:textSize="35dp"
+            android:textColor="#FFF"
+            android:singleLine="true"
+            android:onClick="switchDarkMode"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textAlignment="center"
+            android:text="1"
+            android:textColor="#000"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/soloist1"
+            android:textSize="30dp"
+            android:background="@drawable/circle"
+            android:id="@+id/nbDice1"/>
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textAlignment="center"
+            android:text="2"
+            android:textColor="#000"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/soloist1"
+            android:textSize="30dp"
+            android:background="@drawable/no_circle"
+            android:id="@+id/nbDice2"/>
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textAlignment="center"
+            android:text="3"
+            android:textColor="#000"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/soloist1"
+            android:textSize="30dp"
+            android:background="@drawable/no_circle"
+            android:id="@+id/nbDice3"/>
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textAlignment="center"
+            android:text="4"
+            android:textColor="#000"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/soloist1"
+            android:textSize="30dp"
+            android:background="@drawable/no_circle"
+            android:id="@+id/nbDice4"/>
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textAlignment="center"
+            android:text="5"
+            android:textColor="#000"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/soloist1"
+            android:textSize="30dp"
+            android:background="@drawable/no_circle"
+            android:id="@+id/nbDice5"/>
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textAlignment="center"
+            android:text="6"
+            android:textColor="#000"
+            android:fontFamily="@font/soloist1"
+            android:textSize="30dp"
+            android:background="@drawable/no_circle"
+            android:id="@+id/nbDice6"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginRight="50dp"
+            android:id="@+id/dice1"
+            android:background="@drawable/dice_face_1"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/dice2"
+            android:background="@drawable/dice_face_1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginRight="50dp"
+            android:id="@+id/dice3"
+            android:background="@drawable/dice_face_1"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/dice4"
+            android:background="@drawable/dice_face_1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginRight="50dp"
+            android:id="@+id/dice5"
+            android:background="@drawable/dice_face_1"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/dice6"
+            android:background="@drawable/dice_face_1"/>
+
+    </LinearLayout>
+
+    <Button
+        android:onClick="roll"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="ROLL DICE(S)"
+        android:textColor="#FFF"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:background="@drawable/button_rounded"/>
+
+</LinearLayout>

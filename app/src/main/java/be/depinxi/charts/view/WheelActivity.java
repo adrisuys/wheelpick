@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -18,9 +19,11 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import be.depinxi.charts.R;
@@ -39,8 +42,7 @@ public class WheelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wheel);
-        background = findViewById(R.id.background);
-        background.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
+        handleDarkMode();
         degreeOld = 0;
         degree = 0;
         tv = findViewById(R.id.result);
@@ -121,10 +123,29 @@ public class WheelActivity extends AppCompatActivity {
         return new int[]{color1, color2, color3, color4, color5};
     }
 
+    private void handleDarkMode(){
+        background = findViewById(R.id.background);
+        background.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
+    }
+
+    public void switchDarkMode(View v){
+        DataHolder.setDarkMode(!DataHolder.isDarkModeEnabled());
+        handleDarkMode();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(this, ItemActivity.class);
         startActivity(intent);
+    }
+
+    private void backUp(){
+        Map<String, Integer> map = DataHolder.getOdds();
+        String json = new Gson().toJson(map);
+        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("stats", json);
+        editor.commit();
     }
 }

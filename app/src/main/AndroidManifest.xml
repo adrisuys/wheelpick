@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".view.ItemActivity"/>
         <activity android:name=".view.WheelActivity"/>
+        <activity android:name=".view.DiceActivity"/>
     </application>
 
 </manifest>
