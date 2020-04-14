@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:id="@+id/background">
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:paddingBottom="30dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:paddingLeft="10dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="WHEELPICK"
+            android:fontFamily="@font/soloist1"
+            android:textSize="35dp"
+            android:textColor="#FFF"
+            android:singleLine="true"
+            android:onClick="switchDarkMode"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/dices"
+            android:layout_alignParentLeft="true"
+            android:onClick="goToDice"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/head"
+        android:layout_below="@id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:paddingBottom="30dp"
+        android:background="@color/colorPrimary">
+
+        <EditText
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/search_button"
+            android:paddingLeft="10dp"
+            android:id="@+id/input"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:inputType="text"
+            android:layout_marginRight="5dp"
+            android:singleLine="true"/>
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:id="@+id/search_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_add_circle_black_24dp"
+            android:onClick="addItem"/>
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/head"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:scrollbars="vertical"
+        android:padding="5dp"/>
+
+    <!--<Button
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GO TO WHEEL"
+        android:onClick="goToWheel"/>-->
+
+</RelativeLayout>

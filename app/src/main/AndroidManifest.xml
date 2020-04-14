@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Wheelpick"
+        android:label="Pickably"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -16,6 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.CategorieActivity"/>
         <activity android:name=".view.ItemActivity"/>
         <activity android:name=".view.WheelActivity"/>
         <activity android:name=".view.DiceActivity"/>

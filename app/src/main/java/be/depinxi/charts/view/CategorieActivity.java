@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,37 +22,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import be.depinxi.charts.model.Categorie;
 import be.depinxi.charts.model.DataHolder;
-import be.depinxi.charts.presenter.ItemPresenter;
+import be.depinxi.charts.presenter.Presenter;
 import be.depinxi.charts.R;
 
-public class ItemActivity extends AppCompatActivity implements ViewInterface {
+public class CategorieActivity extends AppCompatActivity implements ViewInterface {
 
     private RecyclerView recyclerView;
     private RelativeLayout background;
     private Adapter adapter;
-    private ItemPresenter presenter;
+    private Presenter presenter;
     private EditText input;
-    private List<Categorie> cats;
-    private List<String> currentList;
-    private TextView title;
-    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item);
+        setContentView(R.layout.activity_categorie);
+        List<Categorie> cat = fetchCategories();
+        DataHolder.setDarkMode(true);
+        presenter = new Presenter(this, cat);
         handleDarkMode();
-        position = DataHolder.getCurrentPos();
-        cats = DataHolder.getCats();
-        currentList = cats.get(position).getItems();
-        title = findViewById(R.id.title_text);
-        title.setText(cats.get(position).getLabel());
-        presenter = new ItemPresenter(this, currentList);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -61,6 +53,30 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
         input = findViewById(R.id.input);
         overrideEnterForInput();
         displayItems();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    private List<Categorie> fetchCategories() {
+        List<Categorie> cats = new ArrayList<>();
+        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String json = sharedPreferences.getString("cats", null);
+        if (json != null){
+            cats = new Gson().fromJson(json, new TypeToken<List<Categorie>>(){}.getType());
+        }
+        return cats;
+    }
+
+    private void backup(){
+        List<Categorie> favs = presenter.getItems();
+        String json = new Gson().toJson(favs);
+        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("cats", json);
+        editor.commit();
     }
 
     private void overrideEnterForInput() {
@@ -74,15 +90,6 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
                 return false;
             }
         });
-    }
-
-    private void backup(){
-        List<Categorie> favs = cats;
-        String json = new Gson().toJson(favs);
-        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("cats", json);
-        editor.commit();
     }
 
     private void displayItems() {
@@ -105,14 +112,15 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
         displayItems();
     }
 
-    public void goToWheel(View v){
-        if (presenter.getItems().size() < 2){
-            Toast.makeText(this, "Not enough items !", Toast.LENGTH_SHORT).show();
-        } else {
-            Intent intent = new Intent(this, WheelActivity.class);
-            intent.putStringArrayListExtra("items", presenter.getItems());
-            startActivity(intent);
-        }
+    public void addItem(View v){
+        String newItem = input.getEditableText().toString();
+        presenter.addItem(newItem);
+        input.setText("");
+        backup();
+    }
+
+    public void goToDice(View v){
+        startActivity(new Intent(this, DiceActivity.class));
     }
 
     public void switchDarkMode(View v){
@@ -121,32 +129,7 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
         adapter.notifyDataSetChanged();
     }
 
-    public void seeStats(View v){
-        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
-        String json = sharedPreferences.getString("stats", null);
-        if (json != null){
-            Map<String, Integer> odds = new Gson().fromJson(json, new TypeToken<Map<String, Integer>>(){}.getType());
-            DataHolder.setOdds(odds);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, CategorieActivity.class);
-        DataHolder.setCats(cats);
-        DataHolder.setCurrentPos(position);
-        startActivity(intent);
-    }
-
-    public void addItem(View v){
-        String newItem = input.getEditableText().toString();
-        presenter.addItem(newItem);
-        input.setText("");
-        backup();
-    }
-
-    public class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tv;
         ImageButton btn;
@@ -155,6 +138,7 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
         public Holder(View itemView){
             super(itemView);
             tv = itemView.findViewById(R.id.name);
+            tv.setOnClickListener(this);
             btn = itemView.findViewById(R.id.del_btn);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -167,17 +151,25 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
 
         public void displayItem(String item) {
             tv.setText(item);
+            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
             background = itemView.findViewById(R.id.background);
             background.setBackgroundResource(DataHolder.isDarkModeEnabled() ? R.drawable.rounded_rect_black : R.drawable.rounded_rect_white);
-            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent newIntent = new Intent(CategorieActivity.this, ItemActivity.class);
+            DataHolder.setCurrentPos(getAdapterPosition());
+            DataHolder.setCats(presenter.getItems());
+            startActivity(newIntent);
         }
     }
 
     private class Adapter extends RecyclerView.Adapter<Holder> {
 
-        private ItemPresenter presenter;
+        private Presenter presenter;
 
-        public Adapter (ItemPresenter presenter){
+        public Adapter (Presenter presenter){
             this.presenter = presenter;
         }
 
@@ -198,7 +190,7 @@ public class ItemActivity extends AppCompatActivity implements ViewInterface {
             return presenter.getItemCount();
         }
 
-        public void setPresenter(ItemPresenter presenter) {
+        public void setPresenter(Presenter presenter) {
             this.presenter = presenter;
         }
     }

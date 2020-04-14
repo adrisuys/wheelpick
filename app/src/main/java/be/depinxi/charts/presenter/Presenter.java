@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.depinxi.charts.model.Categorie;
-import be.depinxi.charts.view.MainActivity;
+import be.depinxi.charts.view.CategorieActivity;
 import be.depinxi.charts.view.ViewInterface;
 
 public class Presenter {
@@ -39,7 +39,7 @@ public class Presenter {
         }
     }
 
-    public void onBindViewHolder(MainActivity.Holder holder, int position) {
+    public void onBindViewHolder(CategorieActivity.Holder holder, int position) {
         String item = items.get(position).getLabel();
         holder.displayItem(item);
     }

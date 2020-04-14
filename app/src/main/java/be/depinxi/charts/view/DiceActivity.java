@@ -1,27 +1,36 @@
 package be.depinxi.charts.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 import be.depinxi.charts.R;
+import be.depinxi.charts.model.DataHolder;
 
 public class DiceActivity extends AppCompatActivity {
 
     private int nbDice;
     private ImageView dice1, dice2, dice3, dice4, dice5, dice6;
-    private TextView nbDice1, nbDice2, nbDice3, nbDice4, nbDice5, nbDice6;
-    List<TextView> values;
+    private List<TextView> values;
+    private TextView score;
+    private LinearLayout bg;
+    private int sum;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice);
+        bg = findViewById(R.id.background);
+        DataHolder.setDarkMode(true);
+        bg.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
         nbDice = 1;
         dice1 = findViewById(R.id.dice1);
         dice2 = findViewById(R.id.dice2);
@@ -34,62 +43,33 @@ public class DiceActivity extends AppCompatActivity {
         dice5.setVisibility(View.INVISIBLE);
         dice6 = findViewById(R.id.dice6);
         dice6.setVisibility(View.INVISIBLE);
+        score = findViewById(R.id.score);
+        score.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
         handleTextView();
     }
 
     private void handleTextView() {
-        nbDice1 = findViewById(R.id.nbDice1);
-        nbDice1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleButtonUI(nbDice1.getText().toString());
-            }
-        });
-        nbDice2 = findViewById(R.id.nbDice2);
-        nbDice2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleButtonUI(nbDice2.getText().toString());
-            }
-        });
-        nbDice3 = findViewById(R.id.nbDice3);
-        nbDice3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleButtonUI(nbDice3.getText().toString());
-            }
-        });
-        nbDice4 = findViewById(R.id.nbDice4);
-        nbDice4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleButtonUI(nbDice4.getText().toString());
-            }
-        });
-        nbDice5 = findViewById(R.id.nbDice5);
-        nbDice5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleButtonUI(nbDice5.getText().toString());
-            }
-        });
-        nbDice6 = findViewById(R.id.nbDice6);
-        nbDice6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleButtonUI(nbDice6.getText().toString());
-            }
-        });
         values = new ArrayList<>();
-        values.add(nbDice1);
-        values.add(nbDice2);
-        values.add(nbDice3);
-        values.add(nbDice4);
-        values.add(nbDice5);
-        values.add(nbDice6);
+        values.add((TextView) findViewById(R.id.nbDice1));
+        values.add((TextView) findViewById(R.id.nbDice2));
+        values.add((TextView) findViewById(R.id.nbDice3));
+        values.add((TextView) findViewById(R.id.nbDice4));
+        values.add((TextView) findViewById(R.id.nbDice5));
+        values.add((TextView) findViewById(R.id.nbDice6));
+        for (final TextView tv : values){
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleButtonUI(tv.getText().toString());
+                }
+            });
+            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
+        }
     }
 
     public void roll(View v){
+        sum = 0;
+        score.setText("");
         setDiceFace(dice1, rollDices());
         if (nbDice >= 2){
             setDiceFace(dice2, rollDices());
@@ -106,6 +86,16 @@ public class DiceActivity extends AppCompatActivity {
         if (nbDice >= 6){
             setDiceFace(dice6, rollDices());
         }
+        score.setText(String.valueOf(sum));
+    }
+
+    public void switchDarkMode(View v){
+        DataHolder.setDarkMode(!DataHolder.isDarkModeEnabled());
+        bg.setBackgroundColor(DataHolder.isDarkModeEnabled() ? Color.BLACK : Color.WHITE);
+        for (TextView tv : values){
+            tv.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
+        }
+        score.setTextColor(DataHolder.isDarkModeEnabled() ? Color.WHITE : Color.BLACK);
     }
 
     private void setDiceFace(ImageView dice, int value) {
@@ -120,7 +110,9 @@ public class DiceActivity extends AppCompatActivity {
     }
 
     private int rollDices(){
-        return (int)(Math.random() * 6) + 1;
+        int rdm = (int)(Math.random() * 6) + 1;
+        sum += rdm;
+        return rdm;
     }
 
     private void handleButtonUI(String text){
