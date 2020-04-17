@@ -7,11 +7,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import be.depinxi.charts.R;
 import be.depinxi.charts.model.DataHolder;
@@ -86,7 +96,12 @@ public class DiceActivity extends AppCompatActivity {
         if (nbDice >= 6){
             setDiceFace(dice6, rollDices());
         }
-        score.setText(String.valueOf(sum));
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                score.setText(String.valueOf(sum));
+            }
+        }, 2500);
     }
 
     public void switchDarkMode(View v){
@@ -100,12 +115,24 @@ public class DiceActivity extends AppCompatActivity {
 
     private void setDiceFace(ImageView dice, int value) {
         switch(value){
-            case 1 : dice.setBackgroundResource(R.drawable.dice_face_1); break;
-            case 2 : dice.setBackgroundResource(R.drawable.dice_face_2); break;
-            case 3 : dice.setBackgroundResource(R.drawable.dice_face_3); break;
-            case 4 : dice.setBackgroundResource(R.drawable.dice_face_4); break;
-            case 5 : dice.setBackgroundResource(R.drawable.dice_face_5); break;
-            case 6 : dice.setBackgroundResource(R.drawable.dice_face_6); break;
+            case 1 :
+                setUIDiceFace(dice, R.drawable.diceroll1);
+                break;
+            case 2 :
+                setUIDiceFace(dice, R.drawable.diceroll2);
+                break;
+            case 3 :
+                setUIDiceFace(dice, R.drawable.diceroll3);
+                break;
+            case 4 :
+                setUIDiceFace(dice, R.drawable.diceroll4);
+            break;
+            case 5 :
+                setUIDiceFace(dice, R.drawable.diceroll5);
+            break;
+            case 6 :
+                setUIDiceFace(dice, R.drawable.diceroll6);
+            break;
         }
     }
 
@@ -170,6 +197,26 @@ public class DiceActivity extends AppCompatActivity {
             dice4.setVisibility(View.INVISIBLE);
             dice5.setVisibility(View.INVISIBLE);
             dice6.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setUIDiceFace(final ImageView dice, final int drawable){
+        Glide.with(this).asGif().load(drawable).listener(new RollDiceListener()).into(dice);
+    }
+
+    private class RollDiceListener implements RequestListener {
+
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+            return true;
+        }
+
+        @Override
+        public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
+            if (resource instanceof GifDrawable){
+                ((GifDrawable)resource).setLoopCount(1);
+            }
+            return false;
         }
     }
 }
